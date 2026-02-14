@@ -56,49 +56,75 @@ When starting with an empty database, create the hierarchy top‑down:
 4) Add items to a box (interactive)
 
 Example (minimal workflow):
-```
-lgrt aw "Home"
-lgrt sww "Home"
-lgrt ar "Basement"
-lgrt as "Shelf A" "Basement"
+```bash
+# add warehouse "Home"
+lgrt aw Home
+
+# switch to warehouse "Home"
+lgrt sww Home
+
+# add room "Basement"
+lgrt ar Basement
+
+# add a shelf to room (you need quotes only when name contains spaces)
+lgrt as "Shelf A" Basement
+
+# add box to shelf
 lgrt ab "Box 1" "Shelf A"
+
+# add items to box interactively
 lgrt ai "Box 1"
 ```
 
 Example (with categories + tags):
-```
+```bash
+# add a category
 lgrt ac "Tools"
+
+# category can be selected in add-item dialog
 lgrt ai "Box 1"
+
+# add a tag to an item
 lgrt at "fragile" <itemId>
 ```
 
-Examples:
-```
-# add and select a warehouse
-lgrt aw "Home"
-lgrt sww "Home"
+Examples list and find:
+```bash
 
-# add structure
-lgrt ar "Basement"
-lgrt as "Shelf A" "Basement"
-lgrt ab "Box 1" "Shelf A"
-
-# add items (interactive TUI)
-lgrt ai "Box 1"
-
-# list
+# list all warehouses
 lgrt lw
+
+# list all rooms
 lgrt lr
+
+# list all shelves
 lgrt ls
+
+# list all boxes
 lgrt lb
+
+# list all items
 lgrt li
 
-# find items
-lgrt f "camera"
-lgrt fs "camera"
+# find all items containing "camera" in name or description
+lgrt f camera
 
-# move
+# find and sort result list
+lgrt fs camera
+
+# list items by tag
+lgrt lit broken
+
+# list items by category
+lgrt lic clothing
+```
+
+Examples reorganizing items
+```bash
+# move item to different  box
 lgrt mi <itemId> <box name|id>
+
+# move box to different shelf
 lgrt mb <boxId> <shelf name|id>
 ```
 
@@ -106,7 +132,7 @@ For the full command list, run `lgrt` without arguments.
 
 ## Data storage
 Data is stored in:
-```
+```bash
 ~/.lgrt/lgrtdata.json
 ```
 
