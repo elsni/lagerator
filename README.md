@@ -31,6 +31,22 @@ The binary is created at `bin/lgrt`.
 make install
 ```
 
+### Migrate data from ginventory
+
+`make install` installs only the executable; it does not import inventory data.
+The ginventory JSON format is compatible with Lagerator. To use the data file
+from a sibling checkout, close both applications and run:
+
+```sh
+mkdir -p ~/.lgrt
+# If Lagerator already has data, back it up before replacing it.
+cp ../ginventory/ginvdata.json ~/.lgrt/lgrtdata.json
+lgrt lw
+lgrt li
+```
+
+This is a one-time copy; the original ginventory file remains unchanged.
+
 ## Usage
 
 Run:
