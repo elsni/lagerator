@@ -20,7 +20,7 @@ Items can also be assigned to categories and tagged.
 ### Build from source
 ```
 git clone https://github.com/elsni/lagerator.git
-cd Lagerator
+cd lagerator
 make build
 ```
 
@@ -128,13 +128,70 @@ lgrt mi <itemId> <box name|id>
 lgrt mb <boxId> <shelf name|id>
 ```
 
-For the full command list, run `lgrt` without arguments.
+### Command reference
+
+Run `lgrt` without arguments for built-in help. The table below also includes
+commands currently omitted from that help. `name-or-id` resolves a matching
+name first, then a numeric ID; ambiguous names open a selection dialog for
+operations that need one record. Typed detail commands print all name matches.
+
+| Command | Arguments | Function |
+| --- | --- | --- |
+| `version`, `--version`, `-v` | none | Show version, build metadata, and author |
+| `aw` | `name` | Create warehouse |
+| `sww` | `name` | Select active warehouse by exact name |
+| `ar` | `name` | Create room in active warehouse |
+| `as` | `name room-name-or-id` | Create shelf in selected room |
+| `ab` | `name shelf-name-or-id` | Create box on selected shelf |
+| `ai` | `box-name-or-id` | Add items repeatedly through the editor |
+| `ac` | `name` | Create category |
+| `lw`, `lws` | none | List warehouses; second command sorts by name |
+| `lr`, `lrs` | none | List rooms; second sorts by name |
+| `ls`, `lss` | none | List shelves; second sorts by name |
+| `lb`, `lbs` | none | List boxes; second sorts by name |
+| `li`, `lis` | none | List items; second sorts by name |
+| `lc`, `lcs` | none | List categories; second sorts by name |
+| `lt` | none | List tags sorted by name, with usage counts |
+| `lic`, `lics` | `category-name-or-id` | List category items; second sorts by name |
+| `lib`, `libs` | `box-name-or-id` | List box items; second sorts by name |
+| `lit`, `lits` | `tag-name-or-id` | List tagged items; second sorts by name |
+| `f`, `fs` | `text` | Search items; second sorts by name |
+| `e` | `id` | Edit category, warehouse, room, shelf, box, or item |
+| `ec`, `ew`, `er`, `es`, `eb`, `ei` | `name-or-id` | Edit the corresponding record type |
+| `d` | `id` | Confirm deletion of category, warehouse, room, shelf, box, or item |
+| `dc`, `dw`, `dr`, `ds`, `db`, `di`, `dt` | `name-or-id` | Confirm deletion of the corresponding type, including tags |
+| `s` | `id` | Show category, warehouse, room, shelf, box, or item details |
+| `sc`, `sw`, `sr`, `ss`, `sb`, `si` | `name-or-id` | Show details for the corresponding type |
+| `at` | `tag-name object-id` | Attach a tag, creating it on first use |
+| `rt` | `tag-name object-id` | Remove a tag from one object |
+| `mi` | `item-id box-name-or-id` | Move item to box |
+| `mb` | `box-id shelf-name-or-id` | Move box to shelf |
+
+Lists span all warehouses. Search matches item name, description, or location
+using case-insensitive substrings. Unsorted lists preserve stored order.
+Quote names and search text containing spaces.
+
+The editor exposes name, description, tags (comma-separated), and type-specific
+fields. Items include location, condition, amount, box, and category. Choose
+**Ok** to save or **Quit** / **Esc** to cancel. **Page Up** / **Page Down** move
+between fields. The add-item workflow continues after each save until cancelled,
+reusing the previous category and location.
+
+Deletion marks only the selected record as deleted; there is no restore command
+or automatic deletion of children. Deleting parents can leave unresolved paths.
+Deleting a tag hides it but leaves its IDs on tagged records; `rt` removes an
+individual attachment while the tag is still active.
 
 ## Data storage
 Data is stored in:
 ```bash
 ~/.lgrt/lgrtdata.json
 ```
+
+The application loads this JSON file at startup and rewrites it after mutations.
+To back up, copy the file while Lagerator is not running; to restore, close
+Lagerator and replace the file with your backup. Current writes are not atomic,
+write errors are not reported, and concurrent writers are not coordinated.
 
 ## Screenshots
 ![Item edit form](screenshots/lgrt_edit.png)
@@ -162,6 +219,9 @@ make test
 
 Tests in `data/` and `logic/` use a temporary home directory to isolate database
 writes. Check static diagnostics with `go vet ./...`.
+
+See the [refactoring and improvement plan](docs/refactoring-plan.md) for the
+architecture assessment, Go baseline review, storage proposal, and ordered work.
 
 ## License
 GPL-3.0-or-later
