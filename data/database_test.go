@@ -1,6 +1,7 @@
 package data
 
 import (
+	"github.com/elsni/lagerator/internal/testhome"
 	"os"
 	"path/filepath"
 	"testing"
@@ -8,22 +9,9 @@ import (
 	"github.com/elsni/lagerator/id"
 )
 
-// TestMain sets a temporary HOME so tests don't touch the real database file.
+// TestMain isolates inventory writes in a temporary home on every supported platform.
 func TestMain(m *testing.M) {
-	tempDir, err := os.MkdirTemp("", "lgrttest-*")
-	if err != nil {
-		panic(err)
-	}
-	originalHome := os.Getenv("HOME")
-	_ = os.Setenv("HOME", tempDir)
-	code := m.Run()
-	if originalHome == "" {
-		_ = os.Unsetenv("HOME")
-	} else {
-		_ = os.Setenv("HOME", originalHome)
-	}
-	_ = os.RemoveAll(tempDir)
-	os.Exit(code)
+	os.Exit(testhome.Run(m))
 }
 
 // resetDb resets the global database and id source.

@@ -25,3 +25,7 @@ go.work
 lgrt
 
 .invdata
+# Release artifacts
+/dist/
+/packaging/generated/
+__pycache__/

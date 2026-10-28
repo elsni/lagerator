@@ -1,0 +1,34 @@
+# Copyright 2026 Lagerator contributors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+inherit go-module
+
+DESCRIPTION="Terminal-based personal inventory management"
+HOMEPAGE="https://github.com/elsni/lagerator"
+MY_P="lagerator-@VERSION@"
+SRC_URI="https://github.com/elsni/lagerator/releases/download/v@VERSION@/lagerator_@VERSION@_source.tar.gz"
+S="${WORKDIR}/${MY_P}"
+
+LICENSE="GPL-3+ Apache-2.0 BSD MIT"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+BDEPEND+=" >=dev-lang/go-1.26.0"
+
+# src_compile builds entirely from the vendored release sources.
+src_compile() {
+    ego build -mod=vendor -trimpath -ldflags "-X github.com/elsni/lagerator/args.appVersion=@VERSION@" -o lgrt . || die
+}
+
+# src_test runs the test suite without accessing the network.
+src_test() {
+    export GOFLAGS="-mod=vendor"
+    ego test ./... || die
+}
+
+# src_install installs the CLI and its documentation and bundled license texts.
+src_install() {
+    dobin lgrt
+    dodoc README.md AUTHORS NOTICE LICENSE
+    dodoc -r docs THIRD_PARTY_LICENSES
+}

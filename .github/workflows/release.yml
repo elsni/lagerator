@@ -1,0 +1,43 @@
+name: Draft release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+  package:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Require a stable version tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]'
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version: '1.27.x'
+          check-latest: true
+      - name: Build release artifacts without publishing
+        uses: goreleaser/goreleaser-action@v7.3.0
+        with:
+          version: v2.19.0
+          args: release --clean --skip=publish
+      - name: Verify release contents and install Debian package
+        run: |
+          python3 scripts/verify-release.py dist
+          sudo dpkg -i dist/lagerator_*_amd64.deb
+          lgrt --version
+      - name: Create draft release after package checks pass
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" --draft --verify-tag --generate-notes --title "Lagerator ${RELEASE_TAG#v}"
+          gh release upload "$RELEASE_TAG" dist/*.tar.gz dist/*.zip dist/*.deb dist/checksums.txt packaging/generated/*.tar.gz packaging/generated/*.ebuild packaging/generated/Manifest

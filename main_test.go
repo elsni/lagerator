@@ -3,11 +3,14 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/elsni/lagerator/internal/testhome"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
+	"time"
 )
 
 // TestCLIOutputUnchanged compares terminal output with snapshots from before extraction.
@@ -29,6 +32,9 @@ func TestCLIOutputUnchanged(t *testing.T) {
 		t.Fatal(err)
 	}
 	binary := filepath.Join(t.TempDir(), "lgrt")
+	if runtime.GOOS == "windows" {
+		binary += ".exe"
+	}
 	if output, err := exec.Command("go", "build", "-o", binary, ".").CombinedOutput(); err != nil {
 		t.Fatalf("build: %v\n%s", err, output)
 	}
@@ -43,11 +49,18 @@ func TestCLIOutputUnchanged(t *testing.T) {
 				t.Fatal(err)
 			}
 			cmd := exec.Command(binary, tc.Args...)
-			cmd.Env = append(os.Environ(), "HOME="+home, "TZ=UTC")
+			cmd.Env = testhome.Environment(home)
 			var stdout, stderr bytes.Buffer
 			cmd.Stdout, cmd.Stderr = &stdout, &stderr
 			if err := cmd.Run(); err != nil {
 				t.Fatalf("run: %v\n%s", err, stderr.String())
+			}
+			// Windows uses its system timezone rather than the subprocess TZ setting.
+			if runtime.GOOS == "windows" {
+				for _, timestamp := range []int64{1700000000, 1700000060} {
+					value := time.Unix(timestamp, 0)
+					tc.Stdout = strings.ReplaceAll(tc.Stdout, value.UTC().Format("02.01.2006 15:04"), value.Local().Format("02.01.2006 15:04"))
+				}
 			}
 			if stdout.String() != tc.Stdout || stderr.String() != tc.Stderr {
 				t.Errorf("output changed\nstdout: %q\nwant:   %q\nstderr: %q\nwant:   %q", stdout.String(), tc.Stdout, stderr.String(), tc.Stderr)

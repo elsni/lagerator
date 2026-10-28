@@ -1,0 +1,77 @@
+version: 2
+project_name: lagerator
+before:
+  hooks:
+    - python3 scripts/prepare-release.py --version {{ .Version }} --clean
+builds:
+  - id: lgrt
+    main: .
+    binary: lgrt
+    env: [CGO_ENABLED=0]
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath, -mod=readonly]
+    ldflags:
+      - >-
+        -s -w
+        -X github.com/elsni/lagerator/args.appVersion={{ .Version }}
+        -X github.com/elsni/lagerator/args.buildCommit={{ .ShortCommit }}
+        -X github.com/elsni/lagerator/args.buildDate={{ .Date }}
+archives:
+  - ids: [lgrt]
+    name_template: 'lagerator_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE
+      - NOTICE
+      - AUTHORS
+      - docs/**
+      - screenshots/**
+      - src: packaging/generated/licenses/**
+        dst: licenses
+        strip_parent: false
+nfpms:
+  - id: debian
+    ids: [lgrt]
+    package_name: lagerator
+    file_name_template: 'lagerator_{{ .Version }}_{{ .Arch }}'
+    homepage: https://github.com/elsni/lagerator
+    maintainer: elsni <elsni@users.noreply.github.com>
+    description: Terminal-based personal inventory management.
+    license: GPL-3.0-or-later
+    section: utils
+    priority: optional
+    formats: [deb]
+    bindir: /usr/bin
+    contents:
+      - src: LICENSE
+        dst: /usr/share/doc/lagerator/copyright
+      - src: README.md
+        dst: /usr/share/doc/lagerator/README.md
+      - src: packaging/generated/licenses/
+        dst: /usr/share/doc/lagerator/licenses/
+        type: tree
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+  extra_files:
+    - glob: packaging/generated/*.tar.gz
+    - glob: packaging/generated/*.ebuild
+    - glob: packaging/generated/Manifest
+release:
+  github:
+    owner: elsni
+    name: lagerator
+  draft: true
+  extra_files:
+    - glob: packaging/generated/*.tar.gz
+    - glob: packaging/generated/*.ebuild
+    - glob: packaging/generated/Manifest
+changelog:
+  sort: asc
+snapshot:
+  version_template: '{{ incpatch .Version }}-dev'
