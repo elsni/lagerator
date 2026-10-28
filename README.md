@@ -1,155 +1,141 @@
 # Lagerator
 
-Terminal-based personal inventory management in Go.
+A terminal-based personal inventory manager written in Go. Track what you own,
+where it is stored, and how much you have, using short CLI commands and an
+interactive editor.
 
-`Lagerator` keeps your stuff organized in a hierarchy:
-Warehouse -> Room -> Shelf -> Box -> Item.
-Items can also be assigned to categories and tagged.
+```text
+Warehouse → Room → Shelf → Box → Item
+```
 
-## Features
-- Hierarchical inventory structure (Warehouse/Room/Shelf/Box/Item)
-- Categories and tags
-- Text search across items
-- TUI editor for adding/editing entries
+Items have a quantity, condition, location, and optional category. Tags and
+case-insensitive search help you find things across your inventory. Data is
+stored locally in a single JSON file.
+
+[Install](#installation) · [Quick start](#quick-start) ·
+[Editor controls](#interactive-editor) · [Commands](#command-reference) ·
+[Data and backups](#data-and-backups) · [Development](#development)
 
 ## Installation
 
-### Requirements
-- Go 1.26.0+
+You need **Go 1.26.0 or newer**, Git, and Make. Interactive forms require a terminal.
 
-### Build from source
-```
+```sh
 git clone https://github.com/elsni/lagerator.git
 cd lagerator
 make build
+./bin/lgrt --version
 ```
 
-The binary is created at `bin/lgrt`.
+The executable is `bin/lgrt`. To use `lgrt` in the examples below, add the build
+directory to your current shell's PATH:
 
-### Install to /usr/local/bin
+```sh
+export PATH="$PWD/bin:$PATH"
 ```
+
+Alternatively, install it to `/usr/local/bin`:
+
+```sh
 make install
 ```
 
-### Migrate data from ginventory
+This builds the release executable and uses `sudo` to copy it into place.
+Installation does not import inventory data.
 
-`make install` installs only the executable; it does not import inventory data.
-The ginventory JSON format is compatible with Lagerator. To use the data file
-from a sibling checkout, close both applications and run:
+## Quick start
+
+For a new inventory, create the hierarchy from the top down:
 
 ```sh
-mkdir -p ~/.lgrt
-# If Lagerator already has data, back it up before replacing it.
-cp ../ginventory/ginvdata.json ~/.lgrt/lgrtdata.json
-lgrt lw
+lgrt aw Home                       # Create a warehouse
+lgrt sww Home                      # Make it active
+lgrt ar Basement                   # Add a room
+lgrt as "Shelf A" Basement         # Add a shelf to that room
+lgrt ab "Box 1" "Shelf A"           # Add a box to that shelf
+lgrt ac Tools                      # Create an item category
+lgrt ai "Box 1"                    # Open the item editor
+```
+
+Enter a name, choose the category, and press **Ctrl+S** to save. The add-item
+editor opens another entry after each save, reusing the previous category and
+location. Press **Ctrl+Q** when you have finished adding items; earlier saves
+remain stored.
+
+List your items and search for one:
+
+```sh
 lgrt li
-```
-
-This is a one-time copy; the original ginventory file remains unchanged.
-
-## Usage
-
-Run:
-```
-lgrt <operation> [args]
-```
-
-Show version/author:
-```
-lgrt --version
-```
-
-Build with version metadata:
-```
-make build VERSION=0.1.0
-```
-
-### Getting started (empty database)
-When starting with an empty database, create the hierarchy top‑down:
-1) Create a warehouse
-2) Switch to it
-3) Add rooms, shelves, boxes
-4) Add items to a box (interactive)
-
-Example (minimal workflow):
-```bash
-# add warehouse "Home"
-lgrt aw Home
-
-# switch to warehouse "Home"
-lgrt sww Home
-
-# add room "Basement"
-lgrt ar Basement
-
-# add a shelf to room (you need quotes only when name contains spaces)
-lgrt as "Shelf A" Basement
-
-# add box to shelf
-lgrt ab "Box 1" "Shelf A"
-
-# add items to box interactively
-lgrt ai "Box 1"
-```
-
-Example (with categories + tags):
-```bash
-# add a category
-lgrt ac "Tools"
-
-# category can be selected in add-item dialog
-lgrt ai "Box 1"
-
-# add a tag to an item
-lgrt at "fragile" <itemId>
-```
-
-Examples list and find:
-```bash
-
-# list all warehouses
-lgrt lw
-
-# list all rooms
-lgrt lr
-
-# list all shelves
-lgrt ls
-
-# list all boxes
-lgrt lb
-
-# list all items
-lgrt li
-
-# find all items containing "camera" in name or description
 lgrt f camera
-
-# find and sort result list
-lgrt fs camera
-
-# list items by tag
-lgrt lit broken
-
-# list items by category
-lgrt lic clothing
+lgrt lib "Box 1"
+lgrt lic Tools
 ```
 
-Examples reorganizing items
-```bash
-# move item to different  box
-lgrt mi <itemId> <box name|id>
+Use IDs from list output for further operations. For example, if an item's ID
+is `42`:
 
-# move box to different shelf
-lgrt mb <boxId> <shelf name|id>
+```sh
+lgrt s 42                          # Show details
+lgrt e 42                          # Edit the item
+lgrt at fragile 42                 # Attach a tag, creating it if necessary
+lgrt lit fragile                   # Find items with that tag
+lgrt rt fragile 42                 # Remove the attachment
 ```
 
-### Command reference
+Quote names or search text that contain spaces. The example ID `42` must be
+replaced with an ID from your own inventory.
 
-Run `lgrt` without arguments for built-in help. The table below also includes
-commands currently omitted from that help. `name-or-id` resolves a matching
-name first, then a numeric ID; ambiguous names open a selection dialog for
-operations that need one record. Typed detail commands print all name matches.
+## Interactive editor
+
+The editor starts in **Name**. Common fields are name, description, and tags;
+item fields also include location, condition, amount, box, and category.
+
+| Control | Action |
+| --- | --- |
+| **Tab** / **Shift+Tab** | Move forward/backward between fields, including the multiline Description |
+| **Page Down** / **Page Up** | Move forward/backward between fields |
+| **Ctrl+S** or **Ok** | Save the entry |
+| **Ctrl+Q**, **Esc**, or **Quit** | Cancel the current entry |
+| **Ctrl+U** | Clear the text in the focused input field |
+| **↑** / **↓** | Navigate autocomplete suggestions |
+| **Enter** / **Tab** in suggestions | Accept the selected completion |
+
+Reference fields such as **Box** and **Category** support case-insensitive
+substring search. Clear the existing value, type part of a name, then accept a
+suggestion. Choices include IDs to distinguish duplicate names. Incomplete or
+invalid choices block saving and focus the field with an explanation; other
+entered values stay intact. Untouched references are preserved.
+
+**Tags** accepts a comma-separated list, for example `fragile, electronics`.
+Start typing a tag prefix to complete an existing tag, including after a comma.
+You can also enter a new tag; it is created when you save. Tab accepts an open
+completion before moving to the next field on a subsequent press.
+
+Bracketed names such as `Box [red]` display literally. Dialogs support bracketed
+paste, including multiline descriptions, and set the terminal title to
+`Lagerator` where supported.
+
+## Command reference
+
+```text
+lgrt <operation> [arguments]
+```
+
+Run `lgrt` without arguments for built-in help. This reference also includes
+commands currently omitted from that help.
+
+### Names, IDs, and scope
+
+- `name-or-id` tries a case-insensitive name match first, then a numeric ID.
+- Ambiguous names open a selection dialog when an operation needs one record.
+  Type-specific detail commands show all matching records.
+- `sww` selects a warehouse by its exact, case-sensitive name.
+- Lists and search span all warehouses. Selecting a warehouse does not filter
+  those results; it determines the parent of newly created rooms.
+- Search matches substrings in item **name**, **description**, and **location**,
+  ignoring case. It does not search category or tag names.
+- Unsorted lists preserve stored order. For paired list/search commands, the
+  second variant sorts by name. `lt` always sorts tags by name.
 
 | Command | Arguments | Function |
 | --- | --- | --- |
@@ -183,90 +169,129 @@ operations that need one record. Typed detail commands print all name matches.
 | `mi` | `item-id box-name-or-id` | Move item to box |
 | `mb` | `box-id shelf-name-or-id` | Move box to shelf |
 
-Lists span all warehouses. Search matches item name, description, or location
-using case-insensitive substrings. Unsorted lists preserve stored order.
-Quote names and search text containing spaces.
+### Moving records
 
-The editor exposes name, description, tags (comma-separated), and type-specific
-fields. Items include location, condition, amount, box, and category. Choose
-**Ok** to save or **Quit** / **Esc** to cancel. **Page Up** / **Page Down** move
-between fields. **Tab** / **Shift+Tab** move forward/backward through all fields,
-including the multiline Description, Location, and Condition.
-**Ctrl+S** saves and **Ctrl+Q** cancels; these shortcuts
-are displayed below the form. Editing starts in the Name field.
+Use the source record's ID and the destination's name or ID:
 
-Reference fields (including Box and Category) support case-insensitive substring
-search. Clear the current text with **Ctrl+U**, type part of a name, select a
-match with the arrow keys, and press **Enter** or **Tab** to complete it.
-Choices include numeric IDs to distinguish duplicate names. An unfinished or
-invalid reference blocks saving and focuses the field with an explanation;
-other entered values remain intact. Untouched references are preserved.
-
-In the Tags field, type a tag prefix (also after a comma), use
-arrow keys to choose an existing tag, then press **Enter** or **Tab** to complete
-it. Bracketed names such as `Box [red]` display literally in selection lists and
-reference dropdowns. Dialogs set the terminal title to `Lagerator` and support
-bracketed paste, including multiline descriptions.
-
-The add-item workflow continues after each save until cancelled,
-reusing the previous category and location.
-
-Deletion marks only the selected record as deleted; there is no restore command
-or automatic deletion of children. Deleting parents can leave unresolved paths.
-Deleting a tag hides it but leaves its IDs on tagged records; `rt` removes an
-individual attachment while the tag is still active.
-
-## Data storage
-Data is stored in:
-```bash
-~/.lgrt/lgrtdata.json
+```text
+lgrt mi <item-id> <box-name-or-id>
+lgrt mb <box-id> <shelf-name-or-id>
 ```
 
-The application loads this JSON file at startup and rewrites it after mutations.
-To back up, copy the file while Lagerator is not running; to restore, close
-Lagerator and replace the file with your backup. Current writes are not atomic,
-write errors are not reported, and concurrent writers are not coordinated.
+### Deleting records
+
+Deletion asks for confirmation and marks the selected record as deleted. There
+is no restore command or automatic deletion of children. Deleting a parent can
+leave unresolved paths for its children.
+
+Deleting a tag hides it but leaves its IDs on tagged records. Use `rt` to remove
+an attachment while the tag is still active.
+
+## Data and backups
+
+Lagerator loads `~/.lgrt/lgrtdata.json` at startup and rewrites it after mutations.
+A missing file starts an empty inventory; the file is created on the first save.
+The selected warehouse is stored with the inventory.
+
+Close Lagerator before copying or restoring the file:
+
+```sh
+# Back up an existing inventory; -i asks before replacing an existing backup.
+cp -i ~/.lgrt/lgrtdata.json ~/lgrtdata-backup.json
+
+# Restore a backup; this replaces the current inventory after confirmation.
+cp -i ~/lgrtdata-backup.json ~/.lgrt/lgrtdata.json
+```
+
+Current writes are not atomic, write errors are not reported, and simultaneous
+writers are not coordinated. Use one Lagerator process at a time and keep backups.
+
+### Importing from ginventory
+
+The ginventory JSON format is compatible with Lagerator. To import from a sibling
+checkout, close both applications, back up any existing Lagerator inventory, and
+copy the data file:
+
+```sh
+mkdir -p ~/.lgrt
+cp -i ../ginventory/ginvdata.json ~/.lgrt/lgrtdata.json
+lgrt lw
+lgrt li
+```
+
+This is a one-time copy. The original ginventory file remains unchanged; the two
+files are not synchronized.
 
 ## Screenshots
+
+### Item editor
+
 ![Item edit form](screenshots/lgrt_edit.png)
+
+### Search results
+
 ![Search results](screenshots/lgrt_find.png)
+
+### Item details
+
 ![Item details](screenshots/lgrt_show.png)
 
 ## Development
+
+### Build and checks
+
+```sh
+make build                        # Build bin/lgrt with version metadata
+make release                      # Build a stripped executable
+make test                         # Run all tests
+go test -count=1 -race ./...       # Run uncached tests with race checks
+go vet ./...                      # Run static diagnostics
+```
+
+Override the version when building a release:
+
+```sh
+make build VERSION=1.0.13
+```
+
+Builds also embed the Git commit and build date, shown by `lgrt --version`.
+`make run` starts the program through Go and prints help without arguments.
+
 ### Project structure
-- `main.go` loads the database, dispatches the command, and prints debug logs when enabled.
-- `args/` parses command-line arguments and routes commands to handlers.
-- `logic/` implements inventory operations, selection, tagging, and editor workflows.
-- `data/` defines plain inventory entities, generic datasets and tables, relationships, and JSON persistence. Model types have no presentation methods or terminal dependencies.
-- `presentation/` renders names, table headers/rows, detail views, filtered lists, and search results. Its functions are shared by CLI handlers and TUI selection lists.
-- `ui/` provides interactive forms, selection lists, and confirmation dialogs using tview/tcell.
-- `id/`, `terminal/`, and `loggi/` provide sequential IDs, terminal formatting, and debug logging.
 
-The application shares a process-wide database (`data.Db`) and ID source.
-Records reference their parents by ID and include timestamps, tags, and a
-soft-deletion flag. Mutating command handlers save the database to
-`~/.lgrt/lgrtdata.json`.
+| Path | Responsibility |
+| --- | --- |
+| `main.go` | Load the database and dispatch commands |
+| `args/` | Parse CLI arguments, route commands, and print help |
+| `data/` | Plain entities, generic datasets/tables, relationships, and JSON persistence |
+| `logic/` | Inventory operations, selection, tagging, and editor workflows |
+| `presentation/` | Render names, tables, details, filtered lists, and search results |
+| `ui/` | Interactive forms, searchable references, completion, and confirmation dialogs |
+| `id/`, `terminal/`, `loggi/` | ID allocation, terminal formatting, and debug logging |
+| `testdata/` | Sanitized inventory and CLI output snapshots |
 
-Run tests:
-```
-make test
-```
+The application currently shares a process-wide database and ID source.
+Records use numeric parent references and include timestamps, tags, and a
+soft-deletion flag. Rendering is separate from the model types.
 
-Tests in `data/` and `logic/` use a temporary home directory to isolate database
-writes. Check static diagnostics with `go vet ./...`.
+### Tests
 
-Presentation tests cover display markers, Unicode truncation, ordering, and
-filtering. CLI integration tests compare 45 cases against output captured before
-the presentation extraction, using sanitized fixtures in `testdata/`. They run
-with a temporary home directory and UTC timestamps, and verify that read-only
-commands leave the inventory file unchanged. UI tests use tcell's simulated
-terminal to exercise rendering, keyboard selection, tag completion, save/cancel,
-tag retention, and multiline paste.
+Data and logic tests isolate file writes with temporary home directories.
+Presentation tests cover markers, Unicode truncation, ordering, and filtering.
+CLI integration tests compare 45 cases against pre-refactoring output snapshots
+and verify that read-only commands leave inventory files unchanged. UI tests use
+a simulated terminal to exercise navigation, literal names, completion,
+save/cancel, tag retention, and multiline paste.
 
-See the [refactoring and improvement plan](docs/refactoring-plan.md) for the
-architecture assessment, Go baseline review, storage proposal, and ordered work.
-The [dependency review](docs/dependency-audit.md) records the stable library
-updates, incorporated features, Go requirements, and validation on 2026-10-28.
+The maintainer targets `make getdata` and `make putdata` copy inventory between
+the repository and `~/.lgrt`. `putdata` replaces the active inventory after moving
+the previous file to `~/.lgrt/lgrtdata.json.bak`.
+
+Further details:
+
+- [Refactoring plan](docs/refactoring-plan.md): architecture assessment and remaining work.
+- [Dependency review](docs/dependency-audit.md): library versions, incorporated features, and validation.
 
 ## License
-GPL-3.0-or-later
+
+[GPL-3.0-or-later](LICENSE). Contributors are listed in [AUTHORS](AUTHORS).
