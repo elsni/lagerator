@@ -142,10 +142,26 @@ Data is stored in:
 ![Item details](screenshots/lgrt_show.png)
 
 ## Development
+### Project structure
+- `main.go` loads the database, dispatches the command, and prints debug logs when enabled.
+- `args/` parses command-line arguments and routes commands to handlers.
+- `logic/` implements inventory operations, selection, tagging, and editor workflows.
+- `data/` defines generic datasets and tables, inventory relationships, terminal output, and JSON persistence.
+- `ui/` provides interactive forms, selection lists, and confirmation dialogs using tview/tcell.
+- `id/`, `terminal/`, and `loggi/` provide sequential IDs, terminal formatting, and debug logging.
+
+The application shares a process-wide database (`data.Db`) and ID source.
+Records reference their parents by ID and include timestamps, tags, and a
+soft-deletion flag. Mutating command handlers save the database to
+`~/.lgrt/lgrtdata.json`.
+
 Run tests:
 ```
 make test
 ```
+
+Tests in `data/` and `logic/` use a temporary home directory to isolate database
+writes. Check static diagnostics with `go vet ./...`.
 
 ## License
 GPL-3.0-or-later
