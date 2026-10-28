@@ -94,21 +94,21 @@
     "args": [
       "version"
     ],
-    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stdout": "\nLagerator 1.0.13 (unknown, unknown) by elsni\n\n",
     "stderr": ""
   },
   {
     "args": [
       "--version"
     ],
-    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stdout": "\nLagerator 1.0.13 (unknown, unknown) by elsni\n\n",
     "stderr": ""
   },
   {
     "args": [
       "-v"
     ],
-    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stdout": "\nLagerator 1.0.13 (unknown, unknown) by elsni\n\n",
     "stderr": ""
   },
   {

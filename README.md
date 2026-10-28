@@ -239,6 +239,8 @@ files are not synchronized.
 
 ## Releases
 
+Packaged downloads are listed on [GitHub Releases](https://github.com/elsni/lagerator/releases).
+
 Release automation builds Debian packages and Linux, macOS, and Windows binaries
 for amd64 and arm64, plus vendored source and a Gentoo ebuild. Stable version tags
 create a **draft GitHub release** after native tests and package checks pass.

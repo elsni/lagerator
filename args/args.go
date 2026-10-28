@@ -14,7 +14,7 @@ import (
 const appName = "Lagerator"
 const appAuthor = "elsni"
 
-var appVersion = "1.0.12"
+var appVersion = "1.0.13"
 var buildCommit = "unknown"
 var buildDate = "unknown"
 
