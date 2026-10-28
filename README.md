@@ -190,8 +190,9 @@ Quote names and search text containing spaces.
 The editor exposes name, description, tags (comma-separated), and type-specific
 fields. Items include location, condition, amount, box, and category. Choose
 **Ok** to save or **Quit** / **Esc** to cancel. **Page Up** / **Page Down** move
-between fields. **Tab** / **Shift+Tab** also move between fields, including the
-multiline description. **Ctrl+S** saves and **Ctrl+Q** cancels; these shortcuts
+between fields. **Tab** / **Shift+Tab** move forward/backward through all fields,
+including the multiline Description, Location, and Condition.
+**Ctrl+S** saves and **Ctrl+Q** cancels; these shortcuts
 are displayed below the form. Editing starts in the Name field.
 
 Reference fields (including Box and Category) support case-insensitive substring

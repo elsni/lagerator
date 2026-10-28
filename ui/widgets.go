@@ -4,8 +4,24 @@ import (
 	"strings"
 
 	"github.com/elsni/lagerator/data"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
+
+// bindEditorInput keeps application focus aligned when editor shortcuts move between fields.
+func bindEditorInput(app *tview.Application, form *tview.Form) {
+	capture := form.GetInputCapture()
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		beforeItem, beforeButton := form.GetFocusedItemIndex()
+		result := capture(event)
+		afterItem, afterButton := form.GetFocusedItemIndex()
+		if beforeItem != afterItem || beforeButton != afterButton {
+			// Rebind the form's navigation delegate to Application.SetFocus.
+			form.Focus(func(item tview.Primitive) { app.SetFocus(item) })
+		}
+		return result
+	})
+}
 
 // configureApplication configures the terminal title and bracketed paste for inventory dialogs.
 func configureApplication(app *tview.Application) *tview.Application {

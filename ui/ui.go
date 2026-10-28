@@ -77,7 +77,7 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 		r, saved = result, accepted
 		app.Stop()
 	})
-	app.SetInputCapture(form.GetInputCapture())
+	bindEditorInput(app, form)
 	if err := app.SetRoot(form, false).SetFocus(form).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}
