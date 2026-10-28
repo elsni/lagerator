@@ -36,7 +36,7 @@ func TestEditorSave(t *testing.T) {
 	if amount.GetText() != "2" {
 		t.Fatal("amount accepted non-numeric input")
 	}
-	form.GetFormItemByLabel("Box").(*tview.DropDown).SetCurrentOption(1)
+	form.GetFormItemByLabel("Box").(*referenceInput).SetText(referenceLabel(options[0][1]))
 	form.Draw(simulationScreen(t))
 	pressKey(form.GetButton(form.GetButtonIndex("Ok")), tcell.KeyEnter, 0)
 	if !saved || result.Name != "Updated" || result.Data.Location != "Shelf B" ||

@@ -190,7 +190,18 @@ Quote names and search text containing spaces.
 The editor exposes name, description, tags (comma-separated), and type-specific
 fields. Items include location, condition, amount, box, and category. Choose
 **Ok** to save or **Quit** / **Esc** to cancel. **Page Up** / **Page Down** move
-between fields. In the Tags field, type a tag prefix (also after a comma), use
+between fields. **Tab** / **Shift+Tab** also move between fields, including the
+multiline description. **Ctrl+S** saves and **Ctrl+Q** cancels; these shortcuts
+are displayed below the form. Editing starts in the Name field.
+
+Reference fields (including Box and Category) support case-insensitive substring
+search. Clear the current text with **Ctrl+U**, type part of a name, select a
+match with the arrow keys, and press **Enter** or **Tab** to complete it.
+Choices include numeric IDs to distinguish duplicate names. An unfinished or
+invalid reference blocks saving and focuses the field with an explanation;
+other entered values remain intact. Untouched references are preserved.
+
+In the Tags field, type a tag prefix (also after a comma), use
 arrow keys to choose an existing tag, then press **Enter** or **Tab** to complete
 it. Bracketed names such as `Box [red]` display literally in selection lists and
 reference dropdowns. Dialogs set the terminal title to `Lagerator` and support

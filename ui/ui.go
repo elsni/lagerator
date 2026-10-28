@@ -77,6 +77,7 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 		r, saved = result, accepted
 		app.Stop()
 	})
+	app.SetInputCapture(form.GetInputCapture())
 	if err := app.SetRoot(form, false).SetFocus(form).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}
@@ -103,7 +104,7 @@ func newEditForm[T any](r data.Dataset[T], idoptions [][]DropdownOptions, captio
 			form.AddInputField(fieldName, fieldvalue.(string), 40, nil, nil)
 			fheight += 2
 		case "uint32":
-			form.AddFormItem(newReferenceDropdown(fieldName[:len(fieldName)-2], idoptions[ididx], fieldvalue.(uint32)))
+			form.AddFormItem(newReferenceInput(fieldName[:len(fieldName)-2], idoptions[ididx], fieldvalue.(uint32)))
 			ididx += 1
 			fheight += 2
 		case "int":
@@ -119,24 +120,28 @@ func newEditForm[T any](r data.Dataset[T], idoptions [][]DropdownOptions, captio
 	}
 	tagfield := newTagInput(data.GetTagList(r.Tags))
 	form.AddFormItem(tagfield)
-	form.AddButton("Ok", func() {
-		ididx = 0
+	save := func() {
+		for i, fieldName := range fields {
+			if field, ok := form.GetFormItem(i + 3).(*referenceInput); ok {
+				if _, valid := field.referenceID(); !valid {
+					form.SetTitle(" Select a valid " + fieldName[:len(fieldName)-2] + " using Enter or Tab ")
+					form.SetFocus(i + 3)
+					return
+				}
+			}
+		}
 		for i, fieldName := range fields {
 			fieldtype, _ := reflections.GetFieldType(r.Data, fieldName)
 			f := form.GetFormItem(i + 3)
 			if f != nil {
-				fmt.Println(fieldtype)
 				switch fieldtype {
 				case "string":
 					text := f.(*tview.InputField).GetText()
 					reflections.SetField(&r.Data, fieldName, text)
 
 				case "uint32":
-					index, _ := f.(*tview.DropDown).GetCurrentOption()
-					if index > -1 {
-						reflections.SetField(&r.Data, fieldName, idoptions[ididx][index].Id)
-					}
-					ididx += 1
+					selected, _ := f.(*referenceInput).referenceID()
+					reflections.SetField(&r.Data, fieldName, selected)
 				case "int":
 					text := f.(*tview.InputField).GetText()
 					val, _ := strconv.Atoi(text)
@@ -148,12 +153,31 @@ func newEditForm[T any](r data.Dataset[T], idoptions [][]DropdownOptions, captio
 		r.Tags = data.GetTagIds(tagfield.GetText())
 		r.Updated = time.Now().Unix()
 		done(r, true)
-	})
+	}
+	form.AddButton("Ok", save)
 	form.AddButton("Quit", func() {
 		done(r, false)
 	})
 	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
+		case tcell.KeyCtrlS:
+			save()
+			return nil
+		case tcell.KeyCtrlQ:
+			done(r, false)
+			return nil
+		case tcell.KeyTab, tcell.KeyBacktab:
+			index, _ := form.GetFocusedItemIndex()
+			if index >= 0 {
+				if _, multiline := form.GetFormItem(index).(*tview.TextArea); multiline {
+					step := 1
+					if event.Key() == tcell.KeyBacktab {
+						step = -1
+					}
+					form.SetFocus(index + step)
+					return nil
+				}
+			}
 		case tcell.KeyEscape:
 			loggi.Log.Log("ESC")
 			done(r, false)
@@ -195,7 +219,13 @@ func newEditForm[T any](r data.Dataset[T], idoptions [][]DropdownOptions, captio
 	form.SetButtonTextColor(tcell.ColorRed)
 
 	form.SetBorder(true).SetTitle(caption + reflect.TypeOf(r.Data).String()[5:] + " ").SetTitleAlign(tview.AlignLeft)
-	form.SetRect(0, 0, 56, fheight)
+	form.SetBorderPadding(0, 1, 0, 0)
+	form.SetFocus(1)
+	form.SetRect(0, 0, 64, fheight+1)
+	form.SetDrawFunc(func(screen tcell.Screen, x, y, width, height int) (int, int, int, int) {
+		tview.Print(screen, "Tab/Shift+Tab: fields | Ctrl+S: save | Ctrl+Q: cancel", x+1, y+height-2, width-2, tview.AlignLeft, tcell.ColorYellow)
+		return x + 1, y + 1, width - 2, height - 3
+	})
 	return form
 }
 
