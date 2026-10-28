@@ -1,32 +1,8 @@
 package data
 
-import (
-	"fmt"
-
-	"github.com/elsni/lagerator/terminal"
-)
-
 type Shelf struct {
 	Location string `json:"location"`
 	RoomId   uint32 `json:"roomId"`
-}
-
-// GetTableRow returns the formatted row for a shelf.
-func (d Shelf) GetTableRow(ownid uint32) string {
-	roomName := GetPrintNameById(&Db.Rooms, d.RoomId, 20)
-	whName := GetPrintNameById(&Db.Warehouses, GetWarehouseIdforRoom(d.RoomId), 20)
-	return fmt.Sprintf("%-20s %-20s", roomName, whName)
-}
-
-// GetTableHeader returns the shelf table header.
-func (d Shelf) GetTableHeader() string {
-	return fmt.Sprintf("%-20s %-20s%s", "Room", "Warehouse", terminal.ResetColor())
-}
-
-// Show prints shelf details.
-func (d Shelf) Show() {
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Location"), d.Location)
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Room"), GetPrintNameById(&Db.Rooms, d.RoomId, 999))
 }
 
 type ShelfTable = DataTable[Shelf]

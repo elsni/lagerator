@@ -203,7 +203,8 @@ write errors are not reported, and concurrent writers are not coordinated.
 - `main.go` loads the database, dispatches the command, and prints debug logs when enabled.
 - `args/` parses command-line arguments and routes commands to handlers.
 - `logic/` implements inventory operations, selection, tagging, and editor workflows.
-- `data/` defines generic datasets and tables, inventory relationships, terminal output, and JSON persistence.
+- `data/` defines plain inventory entities, generic datasets and tables, relationships, and JSON persistence. Model types have no presentation methods or terminal dependencies.
+- `presentation/` renders names, table headers/rows, detail views, filtered lists, and search results. Its functions are shared by CLI handlers and TUI selection lists.
 - `ui/` provides interactive forms, selection lists, and confirmation dialogs using tview/tcell.
 - `id/`, `terminal/`, and `loggi/` provide sequential IDs, terminal formatting, and debug logging.
 
@@ -219,6 +220,12 @@ make test
 
 Tests in `data/` and `logic/` use a temporary home directory to isolate database
 writes. Check static diagnostics with `go vet ./...`.
+
+Presentation tests cover display markers, Unicode truncation, ordering, and
+filtering. CLI integration tests compare 45 cases against output captured before
+the presentation extraction, using sanitized fixtures in `testdata/`. They run
+with a temporary home directory and UTC timestamps, and verify that read-only
+commands leave the inventory file unchanged.
 
 See the [refactoring and improvement plan](docs/refactoring-plan.md) for the
 architecture assessment, Go baseline review, storage proposal, and ordered work.

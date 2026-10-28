@@ -2,7 +2,6 @@ package data
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"slices"
 	"strings"
@@ -54,20 +53,6 @@ func (db *Database) Load() {
 		panic("Data corrupted!")
 	}
 	id.IdSource.SetLastId(db.FindLastId())
-}
-
-// FindItem prints matching items for a search string.
-func (db *Database) FindItem(searchstring string, sortname bool) {
-	if len(Db.Items) == 0 {
-		fmt.Println("no data")
-		return
-	}
-	s := strings.ToLower(searchstring)
-	Db.Items.PrintListFiltered(sortname, func(item Dataset[Item]) bool {
-		return strings.Contains(strings.ToLower(item.Name), s) ||
-			strings.Contains(strings.ToLower(item.Description), s) ||
-			strings.Contains(strings.ToLower(item.Data.Location), s)
-	})
 }
 
 // FindLastId returns the highest id across all tables.

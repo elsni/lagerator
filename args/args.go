@@ -7,6 +7,7 @@ import (
 
 	"github.com/elsni/lagerator/data"
 	"github.com/elsni/lagerator/logic"
+	"github.com/elsni/lagerator/presentation"
 	"github.com/elsni/lagerator/terminal"
 )
 
@@ -135,19 +136,19 @@ func ProcessArgs() {
 				logic.MoveBox(id, a[1])
 			}
 		},
-		"lc":  func(_ []string) { data.Db.Categories.PrintList(false) },
-		"lcs": func(_ []string) { data.Db.Categories.PrintList(true) },
-		"lw":  func(_ []string) { data.Db.Warehouses.PrintList(false) },
-		"lws": func(_ []string) { data.Db.Warehouses.PrintList(true) },
-		"lr":  func(_ []string) { data.Db.Rooms.PrintList(false) },
-		"lrs": func(_ []string) { data.Db.Rooms.PrintList(true) },
-		"ls":  func(_ []string) { data.Db.Shelves.PrintList(false) },
-		"lss": func(_ []string) { data.Db.Shelves.PrintList(true) },
-		"lb":  func(_ []string) { data.Db.Boxes.PrintList(false) },
-		"lbs": func(_ []string) { data.Db.Boxes.PrintList(true) },
-		"li":  func(_ []string) { data.Db.Items.PrintList(false) },
-		"lis": func(_ []string) { data.Db.Items.PrintList(true) },
-		"lt":  func(_ []string) { data.Db.Tags.PrintList(true) },
+		"lc":  func(_ []string) { presentation.PrintList(&data.Db.Categories, false) },
+		"lcs": func(_ []string) { presentation.PrintList(&data.Db.Categories, true) },
+		"lw":  func(_ []string) { presentation.PrintList(&data.Db.Warehouses, false) },
+		"lws": func(_ []string) { presentation.PrintList(&data.Db.Warehouses, true) },
+		"lr":  func(_ []string) { presentation.PrintList(&data.Db.Rooms, false) },
+		"lrs": func(_ []string) { presentation.PrintList(&data.Db.Rooms, true) },
+		"ls":  func(_ []string) { presentation.PrintList(&data.Db.Shelves, false) },
+		"lss": func(_ []string) { presentation.PrintList(&data.Db.Shelves, true) },
+		"lb":  func(_ []string) { presentation.PrintList(&data.Db.Boxes, false) },
+		"lbs": func(_ []string) { presentation.PrintList(&data.Db.Boxes, true) },
+		"li":  func(_ []string) { presentation.PrintList(&data.Db.Items, false) },
+		"lis": func(_ []string) { presentation.PrintList(&data.Db.Items, true) },
+		"lt":  func(_ []string) { presentation.PrintList(&data.Db.Tags, true) },
 		"lic": func(a []string) {
 			if requireArgs(1, a) {
 				logic.PrintItemsOfCategory(a[0], false)
@@ -175,7 +176,7 @@ func ProcessArgs() {
 					fmt.Println("Unknown Tag " + a[0])
 					return
 				}
-				data.Db.Items.PrintListByTagId(data.Db.Tags[idx].ID, false)
+				presentation.PrintListByTagId(&data.Db.Items, data.Db.Tags[idx].ID, false)
 			}
 		},
 		"lits": func(a []string) {
@@ -185,7 +186,7 @@ func ProcessArgs() {
 					fmt.Println("Unknown Tag " + a[0])
 					return
 				}
-				data.Db.Items.PrintListByTagId(data.Db.Tags[idx].ID, true)
+				presentation.PrintListByTagId(&data.Db.Items, data.Db.Tags[idx].ID, true)
 			}
 		},
 		"e": func(a []string) {
@@ -312,12 +313,12 @@ func ProcessArgs() {
 		},
 		"f": func(a []string) {
 			if requireArgs(1, a) {
-				data.Db.FindItem(a[0], false)
+				presentation.FindItem(a[0], false)
 			}
 		},
 		"fs": func(a []string) {
 			if requireArgs(1, a) {
-				data.Db.FindItem(a[0], true)
+				presentation.FindItem(a[0], true)
 			}
 		},
 	}

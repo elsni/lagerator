@@ -1,37 +1,11 @@
 package data
 
-import (
-	"fmt"
-	"sort"
-
-	"github.com/elsni/lagerator/terminal"
-)
+import "sort"
 
 type Box struct {
 	Location string `json:"location"`
 	Type     string `json:"type"`
 	ShelfId  uint32 `json:"shelfId"`
-}
-
-// GetTableRow returns the formatted row for a box.
-func (d Box) GetTableRow(ownid uint32) string {
-	shelfName := GetPrintNameById(&Db.Shelves, d.ShelfId, 20)
-	roomId := GetRoomIdforShelf(d.ShelfId)
-	roomName := GetPrintNameById(&Db.Rooms, roomId, 20)
-	whName := GetPrintNameById(&Db.Warehouses, GetWarehouseIdforRoom(roomId), 20)
-	return fmt.Sprintf("%-20s %-20s %-20s", shelfName, roomName, whName)
-}
-
-// GetTableHeader returns the box table header.
-func (d Box) GetTableHeader() string {
-	return fmt.Sprintf("%-20s %-20s %-20s%s", "Shelf", "Room", "Warehouse", terminal.ResetColor())
-}
-
-// Show prints box details.
-func (d Box) Show() {
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Location"), d.Location)
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Type"), d.Type)
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Shelf"), GetPrintNameById(&Db.Shelves, d.ShelfId, 20))
 }
 
 // GetRoomIdforBox returns the room id for a box id.

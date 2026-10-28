@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/elsni/lagerator/data"
+	"github.com/elsni/lagerator/presentation"
 	"github.com/elsni/lagerator/ui"
 )
 
@@ -305,7 +306,7 @@ func GetDropDownOpts(id uint32) [][]ui.DropdownOptions {
 // get the index of a set from its name or id. let the user select if name is ambigous
 // returns the index of the found set or -1 if not found
 // SelectSet resolves a name or id and may prompt when ambiguous.
-func SelectSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablename string, action string) int {
+func SelectSet[T presentation.Entity](tbl *data.DataTable[T], setname string, tablename string, action string) int {
 	sets := tbl.GetSetsByName(setname)
 	set := data.Dataset[T]{}
 	if len(sets) == 0 {
@@ -334,7 +335,7 @@ func SelectSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablen
 }
 
 // EditSet opens the edit UI for a selected set.
-func EditSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablename string) {
+func EditSet[T presentation.Entity](tbl *data.DataTable[T], setname string, tablename string) {
 	idx := SelectSet(tbl, setname, tablename, "edit")
 	if idx < 0 {
 		return
@@ -347,7 +348,7 @@ func EditSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablenam
 }
 
 // DeleteSet deletes a selected set after confirmation.
-func DeleteSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablename string) {
+func DeleteSet[T presentation.Entity](tbl *data.DataTable[T], setname string, tablename string) {
 	idx := SelectSet(tbl, setname, tablename, "delete")
 	if idx < 0 {
 		return
@@ -357,7 +358,7 @@ func DeleteSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablen
 }
 
 // DeleteSetId deletes a set by index after confirmation.
-func DeleteSetId[T data.CustomData](tbl *data.DataTable[T], idx int, tablename string) {
+func DeleteSetId[T any](tbl *data.DataTable[T], idx int, tablename string) {
 	if ui.Alert(fmt.Sprintf("Do you really want to delete %s \"%s\"?", strings.ToLower(tablename), (*tbl)[idx].Name)) {
 		tbl.Delete((*tbl)[idx].ID)
 		data.Db.Save()
@@ -366,7 +367,7 @@ func DeleteSetId[T data.CustomData](tbl *data.DataTable[T], idx int, tablename s
 }
 
 // ShowSet prints details for the selected set or id.
-func ShowSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablename string) {
+func ShowSet[T presentation.Entity](tbl *data.DataTable[T], setname string, tablename string) {
 	sets := tbl.GetSetsByName(setname)
 	if len(sets) == 0 {
 		id, err := strconv.ParseUint(setname, 10, 32)
@@ -379,17 +380,17 @@ func ShowSet[T data.CustomData](tbl *data.DataTable[T], setname string, tablenam
 			fmt.Printf("No %s with ID %s found.\n", strings.ToLower(tablename), setname)
 			return
 		}
-		(*idset).Show()
+		presentation.Show(*idset)
 	} else {
 
 		for _, set := range sets {
-			set.Show()
+			presentation.Show(set)
 		}
 	}
 }
 
 // AddTagById attaches a tag to a dataset at the given index.
-func AddTagById[T data.CustomData](tbl *data.DataTable[T], idx int, tagid uint32, tagname string) bool {
+func AddTagById[T any](tbl *data.DataTable[T], idx int, tagid uint32, tagname string) bool {
 	objname := strings.Split(fmt.Sprintf("%T", *new(T)), ".")
 	if slices.Contains((*tbl)[idx].Tags, tagid) {
 		fmt.Printf("%s \"%s\" is already tagged with \"%s\"", objname[1], (*tbl)[idx].Name, tagname)
@@ -403,7 +404,7 @@ func AddTagById[T data.CustomData](tbl *data.DataTable[T], idx int, tagid uint32
 }
 
 // RemoveTagById removes a tag from a dataset at the given index.
-func RemoveTagById[T data.CustomData](tbl *data.DataTable[T], idx int, tagid uint32, tagname string) bool {
+func RemoveTagById[T any](tbl *data.DataTable[T], idx int, tagid uint32, tagname string) bool {
 	objname := strings.Split(fmt.Sprintf("%T", *new(T)), ".")
 	if !slices.Contains((*tbl)[idx].Tags, tagid) {
 		fmt.Printf("%s \"%s\" is not tagged with \"%s\"", objname[1], (*tbl)[idx].Name, tagname)
@@ -474,113 +475,4 @@ func RemoveTag(tagname string, id uint32) {
 	default:
 		fmt.Println("No record found.")
 	}
-}
-
-// ShowAny prints details for any object by id.
-func ShowAny(id uint32) {
-	kind, idx := findTableById(id)
-	switch kind {
-	case kindCategory:
-		data.Db.Categories[idx].Show()
-	case kindWarehouse:
-		data.Db.Warehouses[idx].Show()
-	case kindRoom:
-		data.Db.Rooms[idx].Show()
-	case kindShelf:
-		data.Db.Shelves[idx].Show()
-	case kindBox:
-		data.Db.Boxes[idx].Show()
-	case kindItem:
-		data.Db.Items[idx].Show()
-	default:
-		fmt.Println("No record found.")
-	}
-}
-
-// DeleteAny deletes any object by id after confirmation.
-func DeleteAny(id uint32) {
-	kind, idx := findTableById(id)
-	switch kind {
-	case kindCategory:
-		DeleteSetId(&data.Db.Categories, idx, tableName(kind))
-	case kindWarehouse:
-		DeleteSetId(&data.Db.Warehouses, idx, tableName(kind))
-	case kindRoom:
-		DeleteSetId(&data.Db.Rooms, idx, tableName(kind))
-	case kindShelf:
-		DeleteSetId(&data.Db.Shelves, idx, tableName(kind))
-	case kindBox:
-		DeleteSetId(&data.Db.Boxes, idx, tableName(kind))
-	case kindItem:
-		DeleteSetId(&data.Db.Items, idx, tableName(kind))
-	default:
-		fmt.Println("No record found.")
-	}
-}
-
-// EditAny opens the edit UI for any object by id.
-func EditAny(id uint32) {
-	kind, idx := findTableById(id)
-	switch kind {
-	case kindCategory:
-		set, saved := ui.EditItem(data.Db.Categories[idx], GetDropDownOpts(data.Db.Categories[idx].ID), " Edit ")
-		if saved {
-			data.Db.Categories[idx] = set
-			data.Db.Save()
-		}
-	case kindWarehouse:
-		set, saved := ui.EditItem(data.Db.Warehouses[idx], GetDropDownOpts(data.Db.Warehouses[idx].ID), " Edit ")
-		if saved {
-			data.Db.Warehouses[idx] = set
-			data.Db.Save()
-		}
-	case kindRoom:
-		set, saved := ui.EditItem(data.Db.Rooms[idx], GetDropDownOpts(data.Db.Rooms[idx].ID), " Edit ")
-		if saved {
-			data.Db.Rooms[idx] = set
-			data.Db.Save()
-		}
-	case kindShelf:
-		set, saved := ui.EditItem(data.Db.Shelves[idx], GetDropDownOpts(data.Db.Shelves[idx].ID), " Edit ")
-		if saved {
-			data.Db.Shelves[idx] = set
-			data.Db.Save()
-		}
-	case kindBox:
-		set, saved := ui.EditItem(data.Db.Boxes[idx], GetDropDownOpts(data.Db.Boxes[idx].ID), " Edit ")
-		if saved {
-			data.Db.Boxes[idx] = set
-			data.Db.Save()
-		}
-	case kindItem:
-		set, saved := ui.EditItem(data.Db.Items[idx], GetDropDownOpts(data.Db.Items[idx].ID), " Edit ")
-		if saved {
-			data.Db.Items[idx] = set
-			data.Db.Save()
-		}
-	default:
-		fmt.Println("No record found.")
-	}
-}
-
-// PrintItemsOfCategory lists items in a category.
-func PrintItemsOfCategory(catnameOrId string, sortname bool) {
-	idx := SelectSet(&data.Db.Categories, catnameOrId, "Category", "show")
-	if idx < 0 {
-		return
-	}
-	data.Db.Items.PrintListFiltered(sortname, func(set data.Dataset[data.Item]) bool {
-		return set.Data.CategoryId == data.Db.Categories[idx].ID
-	})
-}
-
-// PrintItemsOfBox lists items in a box.
-func PrintItemsOfBox(boxnameOrId string, sortname bool) {
-	idx := SelectSet(&data.Db.Boxes, boxnameOrId, "Box", "show")
-	if idx < 0 {
-		return
-	}
-	data.Db.Items.PrintListFiltered(sortname, func(set data.Dataset[data.Item]) bool {
-		return set.Data.BoxId == data.Db.Boxes[idx].ID
-	})
 }

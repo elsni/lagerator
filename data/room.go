@@ -1,31 +1,9 @@
 package data
 
-import (
-	"fmt"
-
-	"github.com/elsni/lagerator/terminal"
-)
-
 // Typ
 type Room struct {
 	Location    string `json:"location"`
 	WarehouseId uint32 `json:"warehouseId"`
-}
-
-// GetTableRow returns the formatted row for a room.
-func (d Room) GetTableRow(ownid uint32) string {
-	return fmt.Sprintf("%-20s", GetPrintNameById(&Db.Warehouses, d.WarehouseId, 20))
-}
-
-// GetTableHeader returns the room table header.
-func (d Room) GetTableHeader() string {
-	return fmt.Sprintf("%-20s%s", "Warehouse", terminal.ResetColor())
-}
-
-// Show prints room details.
-func (d Room) Show() {
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Location"), d.Location)
-	fmt.Printf("%s %s\n", terminal.GetLabelText("Warehouse"), GetPrintNameById(&Db.Warehouses, d.WarehouseId, 20))
 }
 
 // Liste

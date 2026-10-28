@@ -1,10 +1,8 @@
 package data
 
 import (
-	"io"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/elsni/lagerator/id"
@@ -32,26 +30,6 @@ func TestMain(m *testing.M) {
 func resetDb() {
 	id.IdSource.SetLastId(0)
 	Db = NewDatabase()
-}
-
-// captureOutput captures stdout for the duration of fn.
-func captureOutput(t *testing.T, fn func()) string {
-	t.Helper()
-	old := os.Stdout
-	r, w, err := os.Pipe()
-	if err != nil {
-		t.Fatalf("pipe: %v", err)
-	}
-	os.Stdout = w
-	fn()
-	_ = w.Close()
-	os.Stdout = old
-	out, err := io.ReadAll(r)
-	if err != nil {
-		t.Fatalf("read stdout: %v", err)
-	}
-	_ = r.Close()
-	return string(out)
 }
 
 // dbFilePath returns the path to the database file under the current HOME.
@@ -197,48 +175,6 @@ func TestGetTagIdsEmpty(t *testing.T) {
 	}
 }
 
-// TestFindItem verifies search output for items.
-func TestFindItem(t *testing.T) {
-	resetDb()
-	item := NewDataset[Item]("Hammer", Item{Amount: 1, Location: "Shelf A"})
-	item.Description = "Steel tool"
-	Db.Items.Add(item)
-	Db.Items.Add(NewDataset[Item]("Nails", Item{Amount: 50, Location: "Shelf B"}))
-
-	out := captureOutput(t, func() {
-		Db.FindItem("hammer", false)
-	})
-	if !strings.Contains(out, "Hammer") {
-		t.Fatalf("expected output to include Hammer, got: %s", out)
-	}
-	if strings.Contains(out, "Nails") {
-		t.Fatalf("did not expect Nails in output: %s", out)
-	}
-}
-
-// TestFindItemNoData verifies the no data output.
-func TestFindItemNoData(t *testing.T) {
-	resetDb()
-	out := captureOutput(t, func() {
-		Db.FindItem("anything", false)
-	})
-	if !strings.Contains(out, "no data") {
-		t.Fatalf("expected no data output, got: %s", out)
-	}
-}
-
-// TestFindItemNoMatch verifies no matches are printed.
-func TestFindItemNoMatch(t *testing.T) {
-	resetDb()
-	Db.Items.Add(NewDataset[Item]("Hammer", Item{Amount: 1, Location: "Shelf A"}))
-	out := captureOutput(t, func() {
-		Db.FindItem("wrench", false)
-	})
-	if strings.Contains(out, "Hammer") {
-		t.Fatalf("did not expect Hammer in output: %s", out)
-	}
-}
-
 // TestDataTableOperations verifies core DataTable methods.
 func TestDataTableOperations(t *testing.T) {
 	id.IdSource.SetLastId(0)
@@ -274,13 +210,6 @@ func TestDataTableOperations(t *testing.T) {
 	}
 	if _, ok := dt.GetPtr(999); ok {
 		t.Fatalf("expected GetPtr to fail for missing id")
-	}
-
-	out := captureOutput(t, func() {
-		dt.PrintListFiltered(true, nil)
-	})
-	if !strings.Contains(out, "Alpha") || !strings.Contains(out, "Bravo") {
-		t.Fatalf("expected list output to include names, got: %s", out)
 	}
 
 	dt.Delete(setA.ID)

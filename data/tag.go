@@ -1,26 +1,6 @@
 package data
 
-import (
-	"fmt"
-
-	"github.com/elsni/lagerator/terminal"
-)
-
 type Tag struct {
-}
-
-// GetTableRow returns the formatted row for a tag.
-func (d Tag) GetTableRow(ownid uint32) string {
-	return fmt.Sprintf("%4d", Db.CountTagOccurance(ownid))
-}
-
-// GetTableHeader returns the tag table header.
-func (d Tag) GetTableHeader() string {
-	return fmt.Sprintf("%-15s%s", "uses", terminal.ResetColor())
-}
-
-// Show prints tag details.
-func (d Tag) Show() {
 }
 
 type TagTable = DataTable[Tag]

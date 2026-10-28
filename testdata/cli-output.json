@@ -1,0 +1,342 @@
+[
+  {
+    "args": [
+      "lc"
+    ],
+    "stdout": "\n\u001b[48;5;4m Category \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           \u001b[39m\u001b[49m\n    6 Tools                          \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lcs"
+    ],
+    "stdout": "\n\u001b[48;5;4m Category \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           \u001b[39m\u001b[49m\n    6 Tools                          \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lw"
+    ],
+    "stdout": "\n\u001b[48;5;4m Warehouse \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           \u001b[39m\u001b[49m\n    1 Home*                          \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lws"
+    ],
+    "stdout": "\n\u001b[48;5;4m Warehouse \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           \u001b[39m\u001b[49m\n    1 Home*                          \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lr"
+    ],
+    "stdout": "\n\u001b[48;5;4m Room \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Warehouse           \u001b[39m\u001b[49m\n    2 Basement                       Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lrs"
+    ],
+    "stdout": "\n\u001b[48;5;4m Room \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Warehouse           \u001b[39m\u001b[49m\n    2 Basement                       Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "ls"
+    ],
+    "stdout": "\n\u001b[48;5;4m Shelf \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Room                 Warehouse           \u001b[39m\u001b[49m\n    3 Shelf Ä                        Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lss"
+    ],
+    "stdout": "\n\u001b[48;5;4m Shelf \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Room                 Warehouse           \u001b[39m\u001b[49m\n    3 Shelf Ä                        Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lb"
+    ],
+    "stdout": "\n\u001b[48;5;4m Box \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    4 Box A                          Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lbs"
+    ],
+    "stdout": "\n\u001b[48;5;4m Box \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    4 Box A                          Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "li"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lis"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lt"
+    ],
+    "stdout": "\n\u001b[48;5;4m Tag \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           uses           \u001b[39m\u001b[49m\n    7 fragile                           8\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "version"
+    ],
+    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "--version"
+    ],
+    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "-v"
+    ],
+    "stdout": "\nLagerator 1.0.12 (unknown, unknown) by elsni\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lic",
+      "Tools"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lics",
+      "6"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lib",
+      "Box A"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "libs",
+      "4"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lit",
+      "fragile"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "lits",
+      "7"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "f",
+      "CAMERA"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "fs",
+      "a"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "f",
+      "second"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n    8 Älpha 長長長長長長長長長長長長長長長長長長長長長長長… 1     not found       not found       not found            not found            not found           \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "f",
+      "corner"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n    5 Zebra camera                   2     Tools           Box A           Shelf Ä              Basement             Home*               \n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "f",
+      "absent"
+    ],
+    "stdout": "\n\u001b[48;5;4m Item \u001b[39m\u001b[49m\n\u001b[48;5;4m   ID Name                           Amnt  Category        Box             Shelf                Room                 Warehouse           \u001b[39m\u001b[49m\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "5"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Item                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 5\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Zebra camera\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Corner\n\u001b[48;5;235m\u001b[38;5;11mCondition   \u001b[39m\u001b[49m Used\n\u001b[48;5;235m\u001b[38;5;11mAmount      \u001b[39m\u001b[49m 2\n\u001b[48;5;235m\u001b[38;5;11mBox         \u001b[39m\u001b[49m Box A\n\u001b[48;5;235m\u001b[38;5;11mCategory    \u001b[39m\u001b[49m Tools\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "8"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Item                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 8\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Älpha 長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長長\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Elsewhere\n\u001b[48;5;235m\u001b[38;5;11mCondition   \u001b[39m\u001b[49m New\n\u001b[48;5;235m\u001b[38;5;11mAmount      \u001b[39m\u001b[49m 1\n\u001b[48;5;235m\u001b[38;5;11mBox         \u001b[39m\u001b[49m not found\n\u001b[48;5;235m\u001b[38;5;11mCategory    \u001b[39m\u001b[49m not found\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "9"
+    ],
+    "stdout": "\nNo record found.\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "999"
+    ],
+    "stdout": "\nNo record found.\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "sc",
+      "Tools"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Category                      \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 6\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Tools\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "sw",
+      "Home"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Warehouse                     \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 1\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Home*\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "sr",
+      "Basement"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Room                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 2\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Basement\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Downstairs\n\u001b[48;5;235m\u001b[38;5;11mWarehouse   \u001b[39m\u001b[49m Home*\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "ss",
+      "Shelf Ä"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Shelf                         \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 3\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Shelf Ä\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Wall\n\u001b[48;5;235m\u001b[38;5;11mRoom        \u001b[39m\u001b[49m Basement\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "sb",
+      "Box A"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Box                           \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 4\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Box A\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Top\n\u001b[48;5;235m\u001b[38;5;11mType        \u001b[39m\u001b[49m Plastic\n\u001b[48;5;235m\u001b[38;5;11mShelf       \u001b[39m\u001b[49m Shelf Ä\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "si",
+      "5"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Item                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 5\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Zebra camera\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Corner\n\u001b[48;5;235m\u001b[38;5;11mCondition   \u001b[39m\u001b[49m Used\n\u001b[48;5;235m\u001b[38;5;11mAmount      \u001b[39m\u001b[49m 2\n\u001b[48;5;235m\u001b[38;5;11mBox         \u001b[39m\u001b[49m Box A\n\u001b[48;5;235m\u001b[38;5;11mCategory    \u001b[39m\u001b[49m Tools\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "1"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Warehouse                     \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 1\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Home*\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "2"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Room                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 2\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Basement\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Downstairs\n\u001b[48;5;235m\u001b[38;5;11mWarehouse   \u001b[39m\u001b[49m Home*\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "3"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Shelf                         \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 3\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Shelf Ä\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Wall\n\u001b[48;5;235m\u001b[38;5;11mRoom        \u001b[39m\u001b[49m Basement\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "4"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Box                           \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 4\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Box A\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Top\n\u001b[48;5;235m\u001b[38;5;11mType        \u001b[39m\u001b[49m Plastic\n\u001b[48;5;235m\u001b[38;5;11mShelf       \u001b[39m\u001b[49m Shelf Ä\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "5"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Item                          \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 5\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Zebra camera\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mLocation    \u001b[39m\u001b[49m Corner\n\u001b[48;5;235m\u001b[38;5;11mCondition   \u001b[39m\u001b[49m Used\n\u001b[48;5;235m\u001b[38;5;11mAmount      \u001b[39m\u001b[49m 2\n\u001b[48;5;235m\u001b[38;5;11mBox         \u001b[39m\u001b[49m Box A\n\u001b[48;5;235m\u001b[38;5;11mCategory    \u001b[39m\u001b[49m Tools\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "s",
+      "6"
+    ],
+    "stdout": "\n\u001b[48;5;4mType         Category                      \u001b[39m\u001b[49m\n\u001b[48;5;235m\u001b[38;5;11mId          \u001b[39m\u001b[49m 6\n\u001b[48;5;235m\u001b[38;5;11mName        \u001b[39m\u001b[49m Tools\n\u001b[48;5;235m\u001b[38;5;11mDescription \u001b[39m\u001b[49m First line\n\u001b[48;5;235m\u001b[38;5;11m            \u001b[39m\u001b[49m Second line\n\u001b[48;5;235m\u001b[38;5;11mCreated     \u001b[39m\u001b[49m 14.11.2023 22:13\n\u001b[48;5;235m\u001b[38;5;11mUpdated     \u001b[39m\u001b[49m 14.11.2023 22:14\n\u001b[48;5;235m\u001b[38;5;11mTags        \u001b[39m\u001b[49m fragile\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [],
+    "stdout": "\n\u001b[48;5;4mLagerator - console inventory management\u001b[39m\u001b[49m\nusage: lgrt <operation> [object|list|id|name|searchstring]\n\n\u001b[48;5;4mOperations: \u001b[39m\u001b[49m\n\n\u001b[48;5;4mAdd objects:\u001b[39m\u001b[49m\naw  <name>                       Add a warehouse\nar  <name>                       Add a room to the current warehouse\nas  <shelf name or id> <room name or ID> Add a shelf to a room\nab  <box name or ID> <shelf name or ID>  Add a box to a shelf\nai  <box name or ID>             add items interactively to a specific box\nsww <name>                       switch to warehouse\n\n\u001b[48;5;4mList objects:\u001b[39m\u001b[49m\nlc     list categories\nlcs    list categories sorted by name\nlw     list warehouses\nlws    list warehouses sorted by name\nlr     list rooms\nlrs    list rooms sorted by name\nls     list shelves\nlss    list shelves sorted by name\nlb     list boxes\nlbs    list boxes sorted by name\nli     list items\nlis    list items sorted by name\nlic    <category name or id> list items of a category\nlics   <category name or id> list items of a category sorted by name\nlib    <box name or id>      list items in a box\nlibs   <box name or id>      list items in a box sorted by name\n\n\u001b[48;5;4mEdit objects:\u001b[39m\u001b[49m\ne <id> edit any object\nec <name|id> edit category\new <name|id> edit warehouse\ner <name|id> edit room\nes <name|id> edit shelf\neb <name|id> edit box\n\n\u001b[48;5;4mReorganize:\u001b[39m\u001b[49m\nmi <itemid> <box name or id>   move item to another box\nmb <boxid>  <shelf name or id> move box to another shelf\n\n\u001b[48;5;4mDelete objects:\u001b[39m\u001b[49m\nd <id>     delete object\ndc <name|id>  delete category\ndw <name|id>  delete warehouse\ndr <name|id>  delete room\nds <name|id>  delete shelf\ndb <name|id>  delete box\ndeleting objects won't break integrity, since they are only marked as deleted.\n\n\u001b[48;5;4mTagging:\u001b[39m\u001b[49m\nTags are automatically added on first use.\nlt                              list tags and number of uses\nat   <tagname or id> <objectId> add tag to any object\nrt   <tagname or id> <objectId> remove Tag from object\ndt   <tagname or id>            delete tag from all tagged objects\nlit  <tagname or id>            list items by tag\nlits <tagname or id>            list items by tag sorted by name\n\n\u001b[48;5;4mShow object details:\u001b[39m\u001b[49m\ns <id>     show object\nsc <name|id>  show category\nsw <name|id>  show warehouse\nsr <name|id>  show room\nss <name|id>  show shelf\nsb <name|id>  show box\n\n\u001b[48;5;4mFind items:\u001b[39m\u001b[49m\nf  <searchstring>  list sorted by Id\nfs <searchstring>  list sorted by name\n\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "unknown"
+    ],
+    "stdout": "\nUnknown operation \"unknown\"\n\n",
+    "stderr": ""
+  }
+]

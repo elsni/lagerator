@@ -1,6 +1,10 @@
 # Refactoring and improvement plan
 
-Assessment date: 2026-10-28. This document proposes changes; runtime code is unchanged.
+Assessment date: 2026-10-28. The assessment below describes the original baseline.
+Entity, dataset, table, and search rendering have since moved into `presentation/`;
+data containers no longer require presentation methods. CLI output is checked
+against 45 pre-refactoring snapshots, and `logic.go` has been split to satisfy
+the source-file size limit. The remaining proposals are not yet implemented.
 
 ## Assessment
 

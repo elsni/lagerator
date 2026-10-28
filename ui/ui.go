@@ -8,6 +8,7 @@ import (
 
 	"github.com/elsni/lagerator/data"
 	"github.com/elsni/lagerator/loggi"
+	"github.com/elsni/lagerator/presentation"
 	"github.com/gdamore/tcell/v2"
 	"github.com/oleiade/reflections"
 	"github.com/rivo/tview"
@@ -69,7 +70,7 @@ func TestForm() {
 
 // EditItem opens the edit form for a dataset and returns the updated data.
 // idoptions are the reference dropdown entries, grouped per field.
-func EditItem[T data.CustomData](r data.Dataset[T], idoptions [][]DropdownOptions, caption string) (data.Dataset[T], bool) {
+func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption string) (data.Dataset[T], bool) {
 	saved := false
 	app := tview.NewApplication()
 	var fields []string
@@ -271,7 +272,7 @@ func Alert(message string) bool {
 }
 
 // SelectItem lets the user choose an item and returns its index or -1.
-func SelectItem[T data.CustomData](items []data.Dataset[T], action string) int {
+func SelectItem[T presentation.Entity](items []data.Dataset[T], action string) int {
 	numitems := len(items)
 	lastidx := numitems - 1
 	if numitems == 0 {
@@ -284,7 +285,7 @@ func SelectItem[T data.CustomData](items []data.Dataset[T], action string) int {
 	result := -1
 
 	for i, set := range items {
-		menu.AddItem(set.GetTableRow(), "", rune('a'+i), nil)
+		menu.AddItem(presentation.GetTableRow(set), "", rune('a'+i), nil)
 	}
 	menu.AddItem("Quit", "Press to exit", 'q', nil)
 	menu.SetTitle(fmt.Sprintf("Select %s to %s", reflect.TypeOf(items[0].Data).String()[5:], action))
@@ -299,7 +300,7 @@ func SelectItem[T data.CustomData](items []data.Dataset[T], action string) int {
 		}
 		app.Stop()
 	})
-	menu.SetRect(0, 0, len(items[0].GetTableRow())+6, len(items)+3)
+	menu.SetRect(0, 0, len(presentation.GetTableRow(items[0]))+6, len(items)+3)
 
 	if err := app.SetRoot(menu, false).Run(); err != nil {
 		panic(err)

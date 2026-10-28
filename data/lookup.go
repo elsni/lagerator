@@ -1,13 +1,5 @@
 package data
 
-// GetPrintNameById returns the printable name for an id or a fallback.
-func GetPrintNameById[T CustomData](tbl *DataTable[T], id uint32, width int) string {
-	if set, ok := tbl.GetPtr(id); ok {
-		return set.GetPrintName(width)
-	}
-	return "not found"
-}
-
 // GetWarehouseIdforRoom returns the warehouse id for a room id.
 func GetWarehouseIdforRoom(roomid uint32) uint32 {
 	room, ok := Db.Rooms.GetPtr(roomid)
