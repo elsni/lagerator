@@ -15,7 +15,7 @@ Items can also be assigned to categories and tagged.
 ## Installation
 
 ### Requirements
-- Go 1.21+
+- Go 1.26.0+
 
 ### Build from source
 ```
@@ -174,7 +174,13 @@ Quote names and search text containing spaces.
 The editor exposes name, description, tags (comma-separated), and type-specific
 fields. Items include location, condition, amount, box, and category. Choose
 **Ok** to save or **Quit** / **Esc** to cancel. **Page Up** / **Page Down** move
-between fields. The add-item workflow continues after each save until cancelled,
+between fields. In the Tags field, type a tag prefix (also after a comma), use
+arrow keys to choose an existing tag, then press **Enter** or **Tab** to complete
+it. Bracketed names such as `Box [red]` display literally in selection lists and
+reference dropdowns. Dialogs set the terminal title to `Lagerator` and support
+bracketed paste, including multiline descriptions.
+
+The add-item workflow continues after each save until cancelled,
 reusing the previous category and location.
 
 Deletion marks only the selected record as deleted; there is no restore command
@@ -225,12 +231,14 @@ Presentation tests cover display markers, Unicode truncation, ordering, and
 filtering. CLI integration tests compare 45 cases against output captured before
 the presentation extraction, using sanitized fixtures in `testdata/`. They run
 with a temporary home directory and UTC timestamps, and verify that read-only
-commands leave the inventory file unchanged.
+commands leave the inventory file unchanged. UI tests use tcell's simulated
+terminal to exercise rendering, keyboard selection, tag completion, save/cancel,
+tag retention, and multiline paste.
 
 See the [refactoring and improvement plan](docs/refactoring-plan.md) for the
 architecture assessment, Go baseline review, storage proposal, and ordered work.
-The [dependency audit](docs/dependency-audit.md) records available library updates
-and their Go requirements as checked on 2026-10-28.
+The [dependency review](docs/dependency-audit.md) records the stable library
+updates, incorporated features, Go requirements, and validation on 2026-10-28.
 
 ## License
 GPL-3.0-or-later

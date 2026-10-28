@@ -4,7 +4,10 @@ Assessment date: 2026-10-28. The assessment below describes the original baselin
 Entity, dataset, table, and search rendering have since moved into `presentation/`;
 data containers no longer require presentation methods. CLI output is checked
 against 45 pre-refactoring snapshots, and `logic.go` has been split to satisfy
-the source-file size limit. The remaining proposals are not yet implemented.
+the source-file size limit. Dependencies have also been upgraded to their latest
+stable versions on the existing module paths, with a Go 1.26.0 minimum and
+simulated TUI tests; see [the dependency review](dependency-audit.md). The remaining
+proposals are not yet implemented.
 
 ## Assessment
 

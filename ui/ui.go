@@ -21,7 +21,7 @@ type DropdownOptions struct {
 
 // TestForm shows a demo form for UI testing.
 func TestForm() {
-	app := tview.NewApplication()
+	app := configureApplication(tview.NewApplication())
 	form := tview.NewForm().
 		AddInputField("Monday", "Test", 40, nil, nil).
 		AddInputField("Tuesday", "Test", 40, nil, nil).
@@ -72,12 +72,23 @@ func TestForm() {
 // idoptions are the reference dropdown entries, grouped per field.
 func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption string) (data.Dataset[T], bool) {
 	saved := false
-	app := tview.NewApplication()
+	app := configureApplication(tview.NewApplication())
+	form := newEditForm(r, idoptions, caption, func(result data.Dataset[T], accepted bool) {
+		r, saved = result, accepted
+		app.Stop()
+	})
+	if err := app.SetRoot(form, false).SetFocus(form).EnableMouse(true).Run(); err != nil {
+		panic(err)
+	}
+	return r, saved
+}
+
+// newEditForm builds an editor whose completion callback handles saving or cancellation.
+func newEditForm[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption string, done func(data.Dataset[T], bool)) *tview.Form {
 	var fields []string
 	fields, _ = reflections.Fields(r.Data)
 	ididx := 0
 	fheight := 17
-	taglist := ""
 
 	form := tview.NewForm().
 		AddTextView("Id", fmt.Sprint(r.ID), 5, 1, false, false).
@@ -92,58 +103,9 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 			form.AddInputField(fieldName, fieldvalue.(string), 40, nil, nil)
 			fheight += 2
 		case "uint32":
-			var opt []string
-			initialopt := -1
-			for i, ido := range idoptions[ididx] {
-				opt = append(opt, " "+ido.Name+" ")
-				if ido.Id == fieldvalue.(uint32) {
-					initialopt = i
-				}
-			}
-			//form.AddDropDown(fieldName[:len(fieldName)-2], opt, initialopt, nil)
-			dd := tview.NewDropDown()
-			dd.SetLabel(fieldName[:len(fieldName)-2])
-			dd.SetOptions(opt, nil)
-			dd.SetCurrentOption(initialopt)
-			dd.SetTextOptions("", "", "", "", "please select")
-			form.AddFormItem(dd)
+			form.AddFormItem(newReferenceDropdown(fieldName[:len(fieldName)-2], idoptions[ididx], fieldvalue.(uint32)))
 			ididx += 1
 			fheight += 2
-		/*case "[]uint32":
-		taglist := tview.NewList().ShowSecondaryText(false)
-		alltags := data.Db.Tags.GetNames()
-		for _, tn := range alltags {
-			taglist.AddItem(tn.Name, "", 0, func() {
-
-			})
-		}
-		//form.AddFormItem(taglist)
-
-		ipf := tview.NewInputField().
-			SetLabel("Add Tag: ").
-			SetFieldWidth(40)
-
-		ipf.SetAutocompleteFunc(func(currentText string) (entries []string) {
-			if len(currentText) == 0 {
-				return
-			}
-			for _, tag := range alltags {
-				if strings.HasPrefix(strings.ToLower(tag.Name), strings.ToLower(currentText)) {
-					entries = append(entries, tag.Name)
-				}
-			}
-			if len(entries) <= 1 {
-				entries = nil
-			}
-			return
-		})
-		ipf.SetAutocompletedFunc(func(text string, index, source int) bool {
-			if source != tview.AutocompletedNavigate {
-				ipf.SetText(text)
-			}
-			return source == tview.AutocompletedEnter || source == tview.AutocompletedClick
-		})
-		*/
 		case "int":
 			form.AddInputField(fieldName, fmt.Sprint(fieldvalue), 6, func(text string, last rune) bool {
 				_, err := strconv.Atoi(text)
@@ -155,7 +117,7 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 		}
 
 	}
-	tagfield := tview.NewInputField().SetLabel("Tags").SetText(data.GetTagList(r.Tags)).SetFieldWidth(40).SetChangedFunc(func(text string) { taglist = text })
+	tagfield := newTagInput(data.GetTagList(r.Tags))
 	form.AddFormItem(tagfield)
 	form.AddButton("Ok", func() {
 		ididx = 0
@@ -183,21 +145,18 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 				}
 			}
 		}
-		r.Tags = data.GetTagIds(taglist)
+		r.Tags = data.GetTagIds(tagfield.GetText())
 		r.Updated = time.Now().Unix()
-		saved = true
-		app.Stop()
+		done(r, true)
 	})
 	form.AddButton("Quit", func() {
-		saved = false
-		app.Stop()
+		done(r, false)
 	})
 	form.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyEscape:
 			loggi.Log.Log("ESC")
-			saved = false
-			app.Stop()
+			done(r, false)
 			return nil
 		case tcell.KeyPgDn:
 			fallthrough
@@ -237,15 +196,12 @@ func EditItem[T any](r data.Dataset[T], idoptions [][]DropdownOptions, caption s
 
 	form.SetBorder(true).SetTitle(caption + reflect.TypeOf(r.Data).String()[5:] + " ").SetTitleAlign(tview.AlignLeft)
 	form.SetRect(0, 0, 56, fheight)
-	if err := app.SetRoot(form, false).SetFocus(form).EnableMouse(true).Run(); err != nil {
-		panic(err)
-	}
-	return r, saved
+	return form
 }
 
 // Alert shows a confirmation dialog and returns true on acceptance.
 func Alert(message string) bool {
-	app := tview.NewApplication()
+	app := configureApplication(tview.NewApplication())
 	form := tview.NewForm()
 	result := false
 	form.AddTextView("", message, 30, 3, true, false)
@@ -279,8 +235,8 @@ func SelectItem[T presentation.Entity](items []data.Dataset[T], action string) i
 		return 0
 	}
 
-	app := tview.NewApplication()
-	menu := tview.NewList()
+	app := configureApplication(tview.NewApplication())
+	menu := newSelectionList()
 
 	result := -1
 
