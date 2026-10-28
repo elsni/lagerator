@@ -87,7 +87,11 @@ lgrt --version
    Gentoo's public source URL becomes usable after publication.
 
 Only stable `vX.Y.Z` tags are accepted. The workflow has no prerelease or nightly
-publishing path. If it fails before draft creation, fix the cause and rerun it.
+publishing path. If a tag push does not schedule the workflow, or packaging needs to be retried,
+open **Actions → Draft release → Run workflow**, select `main`, and enter the
+existing tag (for example `v1.0.13`). Both tests and packaging check out that exact
+tag; the tag is never moved. If it fails before draft creation, fix the cause and
+rerun it.
 If a draft already exists, review or delete that draft before retrying: the
 workflow deliberately fails rather than overwriting an existing release.
 

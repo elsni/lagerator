@@ -2,23 +2,32 @@ name: Draft release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing stable version tag to release
+        type: string
+        required: true
 permissions:
   contents: read
 jobs:
   test:
     uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
   package:
     needs: test
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ env.RELEASE_TAG }}
       - name: Require a stable version tag
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
         run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]'
       - uses: actions/setup-go@v7.0.0
         with:
@@ -37,7 +46,6 @@ jobs:
       - name: Create draft release after package checks pass
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" --draft --verify-tag --generate-notes --title "Lagerator ${RELEASE_TAG#v}"
           gh release upload "$RELEASE_TAG" dist/*.tar.gz dist/*.zip dist/*.deb dist/checksums.txt packaging/generated/*.tar.gz packaging/generated/*.ebuild packaging/generated/Manifest
