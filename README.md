@@ -229,6 +229,8 @@ commands leave the inventory file unchanged.
 
 See the [refactoring and improvement plan](docs/refactoring-plan.md) for the
 architecture assessment, Go baseline review, storage proposal, and ordered work.
+The [dependency audit](docs/dependency-audit.md) records available library updates
+and their Go requirements as checked on 2026-10-28.
 
 ## License
 GPL-3.0-or-later
